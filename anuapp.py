@@ -1,24 +1,14 @@
 import streamlit as st
-import googletrans
-translator = googletrans.Translator()
+from deep_translator import GoogleTranslator
 
-def get_key(val):
-    for key, value in googletrans.LANGUAGES.items():
-         if val == value:
-             return key
-    return "en"
+st.title("Google Translator App")
 
-st.markdown('<style>body{background-color: Blue;}</style>', unsafe_allow_html=True)
-st.title('Text Translator')
-option = st.selectbox('Select the language', tuple(googletrans.LANGUAGES.values()))
-text = st.text_area('Enter the text to translate')
+text = st.text_input("Enter text")
 
-if text:
-    try:
-        translated = translator.translate(text, dest=get_key(option))
-        st.write('Translated text:', translated.text)
-    except Exception as e:
-        st.error(f"Translation failed: {e}")
-else:
-    st.info('Enter text above to get a translation.')
+target_lang = st.selectbox("Choose language", ["hi", "fr", "es", "de", "ta", "te"])
+
+if st.button("Translate"):
+    if text:
+        translated = GoogleTranslator(source="auto", target=target_lang).translate(text)
+        st.success(translated)
     
